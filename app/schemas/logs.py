@@ -16,7 +16,9 @@ class AuditLogBase(BaseModel):
     operation: Optional[str]
     status: Optional[str]
     error_message: Optional[str]
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+
+    details: Dict[str, Any] = Field(default_factory=dict)
+
 
 
 class AuditLogCreate(AuditLogBase):

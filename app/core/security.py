@@ -1,11 +1,15 @@
-from datetime import datetime, timedelta
+
 import secrets
+from datetime import datetime, timedelta
+
 from typing import Dict
 
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
+
 _sessions: Dict[str, Dict[str, str]] = {}
 
 
