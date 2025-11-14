@@ -105,7 +105,9 @@ class AuditLog(Base):
     operation = Column(String(100))
     status = Column(String(20))
     error_message = Column(Text)
+
     details = Column(JSON, default=dict)
+
 
 
 class SystemConfiguration(Base):

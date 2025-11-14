@@ -8,7 +8,11 @@ from fastapi.testclient import TestClient
 from app.main import app
 
 
+client = TestClient(app)
+
+
 def _get_auth_headers(client: TestClient, username: str, password: str) -> dict[str, str]:
+
     response = client.post("/api/auth/login", json={"username": username, "password": password})
     assert response.status_code == 200
     token = response.json()["access_token"]
@@ -16,6 +20,7 @@ def _get_auth_headers(client: TestClient, username: str, password: str) -> dict[
 
 
 def test_full_workflow():
+
     with TestClient(app) as client:
         headers = _get_auth_headers(client, "admin", "ChangeMe123!")
 
@@ -62,6 +67,7 @@ def test_full_workflow():
         assert response.status_code == 200
         body = response.json()
         assert "service" in body and "key" in body
+
 
 
 
