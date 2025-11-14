@@ -1,7 +1,9 @@
 # GMDB 加密中间件管理平台
 
 ## 项目简介
-GMDB 加密中间件管理平台提供一个面向医院信息化场景的 B/S 管理界面后端，实现敏感字段配置、数据迁移任务编排、加密服务监控、审计日志管理、系统配置、备份恢复以及在线帮助等核心能力。后端采用 [FastAPI](https://fastapi.tiangolo.com/) + SQLAlchemy 架构，默认使用 SQLite 存储，支持通过环境变量切换到其他数据库。
+
+GMDB 加密中间件管理平台提供一个面向医院信息化场景的 B/S 管理界面后端，实现敏感字段配置、数据迁移任务编排、加密服务监控、审计日志管理、系统配置、备份恢复以及在线帮助等核心能力。后端采用 [FastAPI](https://fastapi.tiangolo.com/) + SQLAlchemy 架构，默认使用 SQLite 存储，并通过统一的数据库配置支持切换到 PostgreSQL、MySQL、SQL Server、Oracle 等主流关系型数据库。
+
 
 核心模块：
 - **认证与权限**：用户名密码登录、Token 发放与注销、角色枚举（管理员、运维、审计）。
@@ -72,9 +74,20 @@ tests/
 > 修改默认管理员密码后请同时更新文档与部署环境的变量配置，以免暴露弱口令。
 
 ## 数据库迁移
-默认使用 SQLite，无需额外配置。如需切换到其他数据库（例如 PostgreSQL）：
-1. 创建数据库并准备连接字符串，例如 `postgresql+psycopg2://user:password@host:5432/dbname`。
-2. 启动服务前设置环境变量 `GMDB_DATABASE_URL`。
+
+默认使用 SQLite，无需额外配置。如需切换到其他数据库，请确保安装对应的驱动并按以下示例配置连接串：
+
+| 数据库 | 推荐驱动 | 连接串示例 |
+| --- | --- | --- |
+| PostgreSQL | `psycopg2` 或 `asyncpg` | `postgresql+psycopg2://user:password@host:5432/dbname` |
+| MySQL / MariaDB | `pymysql` 或 `mysqlclient` | `mysql+pymysql://user:password@host:3306/dbname` |
+| SQL Server | `pyodbc` | `mssql+pyodbc://user:password@host:1433/dbname?driver=ODBC+Driver+18+for+SQL+Server` |
+| Oracle | `cx_Oracle` | `oracle+cx_oracle://user:password@host:1521/?service_name=ORCLCDB` |
+
+部署步骤：
+1. 在系统中安装对应数据库的客户端依赖与 Python 驱动（可按需在 `requirements.txt` 中追加）。
+2. 启动服务前设置环境变量 `GMDB_DATABASE_URL` 为目标数据库的连接串。
+
 3. 首次启动会自动建表并加载默认配置。
 
 ## 运行测试
